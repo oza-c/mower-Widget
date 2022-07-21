@@ -17,15 +17,17 @@ let fm = FileManager.iCloud();
 //// Images //////////////////////////////////
 let imgs = {
   status_1:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-  status_2:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-  status_3:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXGSJ35FBT2YIBZZCPWYWZRBZA",
   status_4:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-  status_5:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_4.png?token=GHSAT0AAAAAABWYJFXHTAATUF2WCBEDEGCMYWZRCHQ",
+  status_7:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_7.png?token=GHSAT0AAAAAABWYJFXGMA2M7MBCFKHNMHNOYWZRC2A",
+  status_error:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_error.png?token=GHSAT0AAAAAABWYJFXHI7ODLKSS6PQHM672YWZRDIQ",
+  status_loading:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_loading.png?token=GHSAT0AAAAAABWYJFXGEXN3P6PVVAZMMOKKYWZRDVQ",
+  status_rain:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/status_rain.png?token=GHSAT0AAAAAABWYJFXHESZEW2YJON5P5NXMYWZRBDA",
 };
 
 /// Status Enums ///
@@ -168,6 +170,7 @@ function getStatusText() {
 
 async function getLandroidData() {
   let productId = ""; //PRODUCT ID HERE
+
   let BearerTokenRequest = new Request(
     "https://api.worxlandroid.com/api/v2/oauth/token"
   );
@@ -177,10 +180,9 @@ async function getLandroidData() {
     "Content-Type": "multipart/form-data;",
     "Accept-Encoding": "gzip, deflate, br",
   };
-
+  BearerTokenRequest.addParameterToMultipart("grant_type", "password");
   BearerTokenRequest.addParameterToMultipart("username", "");
   BearerTokenRequest.addParameterToMultipart("password", "");
-  BearerTokenRequest.addParameterToMultipart("grant_type", "password");
   BearerTokenRequest.addParameterToMultipart("client_id", "1");
   BearerTokenRequest.addParameterToMultipart("scope", "*");
   BearerTokenRequest.addParameterToMultipart("client_secret", "");
@@ -198,19 +200,27 @@ async function getLandroidData() {
 }
 
 async function getStatusImage() {
-  let image = "status_4.png";
+  console.log("ErrorCode: " + landroidData.dat.le);
+  console.log("StatusCode: " + landroidData.dat.ls);
+  console.log("LoadingCode: " + landroidData.dat.bt.c);
   if (landroidData.dat.le == 0) {
     if (landroidData.dat.bt.c != 0) {
       if (landroidData.dat.bt.c == 1) {
-        image = "status_2.png";
+        image = "status_loading.png";
       } else {
-        image = "status_4.png";
+        image = "status_1.png";
       }
     } else {
-      image = "status_" + landroidData.dat.ls + ".png";
+      if (imgs["status_" + landroidData.dat.ls]) {
+        image = "status_" + landroidData.dat.ls + ".png";
+      } else image = "status_1.png";
     }
   } else {
-    image = "status_4.png";
+    if (landroidData.dat.le == 5) {
+      image = "status_rain.png";
+    } else {
+      image = "status_error.png";
+    }
   }
   let path = fm.joinPath(dir, image);
   if (fm.fileExists(path)) {
