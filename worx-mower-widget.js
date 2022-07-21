@@ -87,23 +87,30 @@ async function createWidget() {
 
 async function getLandroidData() {
   let productId = ""; //PRODUCT ID HERE
-  let formdata = {
-    username: "", // ACCOUNT EMAIL HERE
-    password: "", //ACCOUNT PASSWORD HERE
-    grant_type: "password",
-    client_id: "1",
-    scope: "*",
-    client_secret: "", //CLIENT SECRET HERE
-  };
 
   let BearerTokenRequest = new Request(
     "https://api.worxlandroid.com/api/v2/oauth/token"
   );
   BearerTokenRequest.method = "POST";
-  BearerTokenRequest.body = JSON.stringify(formdata);
-  let tokenResponse = await BearerTokenRequest.loadJSON();
-  console.log(tokenResponse);
+  BearerTokenRequest.headers = {
+    Accept: "*/* ",
+    "Content-Type": "multipart/form-data;",
+    "Accept-Encoding": "gzip, deflate, br",
+  };
+  BearerTokenRequest.addParameterToMultipart("grant_type", "password");
+  BearerTokenRequest.addParameterToMultipart(
+    "username",
+    "" //Email here
+  );
+  BearerTokenRequest.addParameterToMultipart("password", ""); //Password here
+  BearerTokenRequest.addParameterToMultipart("client_id", "1");
+  BearerTokenRequest.addParameterToMultipart("scope", "*");
+  BearerTokenRequest.addParameterToMultipart(
+    "client_secret",
+    "" //Client secret here
+  );
 
+  let tokenResponse = await BearerTokenRequest.loadJSON();
   let StatusInformationRequest = new Request(
     "https://api.worxlandroid.com/api/v2/product-items/" + productId + "/status"
   );
@@ -111,7 +118,6 @@ async function getLandroidData() {
   StatusInformationRequest.headers = {
     Authorization: "Bearer " + tokenResponse.access_token,
   };
-  console.log(StatusInformationRequest);
   return await StatusInformationRequest.loadJSON();
 }
 
