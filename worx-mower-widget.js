@@ -5,6 +5,8 @@
 // description: A scriptable widget which displays the latest information from your worx landmower
 // original author: Matthes Schlichte
 // email: matthes@schlichte.dev
+// CONFIG ZONE //
+let UpdateTimeInterval = 180; //In Sekunden
 let PARAM = args.widgetParameter;
 let fm = FileManager.iCloud();
 let dir = fm.joinPath(fm.documentsDirectory(), "worx-landroid-widget");
@@ -24,7 +26,10 @@ Script.complete();
 async function createWidget() {
   let listWidget = new ListWidget();
   listWidget.backgroundColor = new Color("1B2430");
-  listWidget.setPadding(10, 0, 10, 10);
+  listWidget.refreshAfterDate = new Date(
+    Date.now() + 1000 * UpdateTimeInterval
+  );
+  listWidget.setPadding(10, 5, 10, 5);
   listWidget.addSpacer(10);
 
   const wrap = listWidget.addStack();
