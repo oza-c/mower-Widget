@@ -6,34 +6,11 @@
 // original author: Matthes Schlichte
 // email: matthes@schlichte.dev
 let PARAM = args.widgetParameter;
-let landroidData;
 let fm = FileManager.iCloud();
 let dir = fm.joinPath(fm.documentsDirectory(), "worx-landroid-widget");
-
+if (!fm.fileExists(dir)) fm.createDirectory(dir);
+let landroidData = await getLandroidData();
 await saveImages();
-
-async function getLandroidData() {
-  let productId = ""; //PRODUCT ID HERE
-  let formdata = {
-    username: "", // ACCOUNT EMAIL HERE
-    password: "", //ACCOUNT PASSWORD HERE
-    grant_type: "password",
-    client_id: "1",
-    scope: "*",
-    client_secret: "", //CLIENT SECRET HERE
-  };
-
-  let BearerTokenRequest = new Request(
-    "https://api.worxlandroid.com/api/v2/oauth/token"
-  );
-  BearerTokenRequest.method = "POST";
-  BearerTokenRequest.body = JSON.stringify(formdata);
-  let tokenResponse = await BearerTokenRequest.loadJSON();
-
-  let StatusInformationRequest = new Request(
-    "https://api.worxlandroid.com/api/v2/product-items/" + productId + "/status"
-  );
-}
 
 const widget = await createWidget();
 
@@ -45,8 +22,6 @@ if (!config.runsInWidget) {
 Script.complete();
 
 async function createWidget() {
-  landroidData = await getLandroidData();
-
   let listWidget = new ListWidget();
   listWidget.backgroundColor = new Color("1B2430");
   listWidget.setPadding(10, 0, 10, 10);
@@ -60,7 +35,7 @@ async function createWidget() {
   const column0 = wrap.addStack();
   column0.layoutVertically();
 
-  const icon = await getStatusImage("status_" + landroidData.dat.ls + ".png");
+  const icon = await getStatusImage();
 
   let CarStack = column0.addStack();
   let iconImg = CarStack.addImage(icon);
@@ -110,20 +85,49 @@ async function createWidget() {
   return listWidget;
 }
 
-async function getStatusImage(image) {
+async function getLandroidData() {
+  let productId = ""; //PRODUCT ID HERE
+  let formdata = {
+    username: "", // ACCOUNT EMAIL HERE
+    password: "", //ACCOUNT PASSWORD HERE
+    grant_type: "password",
+    client_id: "1",
+    scope: "*",
+    client_secret: "", //CLIENT SECRET HERE
+  };
+
+  let BearerTokenRequest = new Request(
+    "https://api.worxlandroid.com/api/v2/oauth/token"
+  );
+  BearerTokenRequest.method = "POST";
+  BearerTokenRequest.body = JSON.stringify(formdata);
+  let tokenResponse = await BearerTokenRequest.loadJSON();
+  console.log(tokenResponse);
+
+  let StatusInformationRequest = new Request(
+    "https://api.worxlandroid.com/api/v2/product-items/" + productId + "/status"
+  );
+  StatusInformationRequest.method = "GET";
+  StatusInformationRequest.headers = {
+    Authorization: "Bearer " + tokenResponse.access_token,
+  };
+  console.log(StatusInformationRequest);
+  return await StatusInformationRequest.loadJSON();
+}
+
+async function getStatusImage() {
+  let image = "status_4.png";
+  if (landroidData.dat.ls == 1) {
+    image = "status_1.png";
+  } else if (landroidData.dat.ls == 2) {
+    image = "status_2.png";
+  }
+
   let fm = FileManager.local();
   let dir = fm.documentsDirectory();
   let path = fm.joinPath(dir, image);
   if (fm.fileExists(path)) {
-    return fm.readImage(path);
-    //fm.remove(path)
-  } else {
-    // download once
-    let iconImage = await loadImage(
-      "https://eu.worx.com/wp-content/themes/worx/dist/images/pages/landroid-pillar/box-1.png"
-    );
-    fm.writeImage(path, iconImage);
-    return iconImage;
+    return getImageFor(image);
   }
 }
 
@@ -142,15 +146,15 @@ function getTextColor(data) {
 async function saveImages() {
   let imgs = {
     status_1:
-      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_1.png?raw=true",
+      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
     status_2:
-      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_2.png?raw=true",
+      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
     status_3:
-      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_3.png?raw=true",
+      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
     status_4:
-      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_4.png?raw=true",
+      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
     status_5:
-      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_5.png?raw=true",
+      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
   };
   for (img in imgs) {
     imgName = img + ".png";
