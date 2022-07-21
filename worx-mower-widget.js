@@ -5,13 +5,69 @@
 // description: A scriptable widget which displays the latest information from your worx landmower
 // original author: Matthes Schlichte
 // email: matthes@schlichte.dev
+
 // CONFIG ZONE //
 let UpdateTimeInterval = 180; //In Sekunden
+
+//DONT CHANGE ANYTHING ! OWN RISK //
 let PARAM = args.widgetParameter;
 let fm = FileManager.iCloud();
+////////////////////////////////////
+
+//// Images //////////////////////////////////
+let imgs = {
+  status_1:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
+  status_2:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
+  status_3:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
+  status_4:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
+  status_5:
+    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
+};
+
+/// Status Enums ///
+const LastStatus = {
+  0: "Steht",
+  1: "zu Hause",
+  2: "Startvorgang",
+  3: "Verlässt Zuhause",
+  4: "Folgt Kabel",
+  5: "Fährt zur Station",
+  6: "Sucht Kabel",
+  7: "Mäht",
+  8: "Start nach Anheben",
+};
+
+const ErrorStatus = {
+  0: "Fehlerfrei",
+  1: "Festgefahren",
+  2: "Angehoben",
+  3: "Kein Kabelkontakt",
+  4: "Über Begrenzung",
+  5: "Regnet",
+  11: "Über Kopf",
+  12: "Baterie leer",
+  14: "Ladefehler",
+  16: "Gesperrt",
+  17: "Überhitzt",
+  19: "Klappe offen",
+};
+
+const LadeStatus = {
+  0: "Fertig geladen",
+  1: "Lädt",
+  2: "Ladefehler",
+};
+///////////////////////////
+
 let dir = fm.joinPath(fm.documentsDirectory(), "worx-landroid-widget");
 if (!fm.fileExists(dir)) fm.createDirectory(dir);
 let landroidData = await getLandroidData();
+console.log(landroidData);
+
 await saveImages();
 
 const widget = await createWidget();
@@ -53,8 +109,8 @@ async function createWidget() {
   BatteryStack.layoutVertically();
   const batteryStatusLabel = BatteryStack.addText("Status");
   batteryStatusLabel.font = Font.mediumSystemFont(11);
-  const batteryStatusVal = BatteryStack.addText("Ladevorgang");
-  batteryStatusVal.font = Font.boldSystemFont(16);
+  const batteryStatusVal = BatteryStack.addText(getStatusText());
+  batteryStatusVal.font = Font.boldSystemFont(13);
   column1.addSpacer(10);
 
   let BatteryVol = column1.addStack();
@@ -62,7 +118,7 @@ async function createWidget() {
   BatteryVol.layoutVertically();
   const BatteryVolLabel = BatteryVol.addText("Batterie Spannung");
   BatteryVolLabel.font = Font.mediumSystemFont(12);
-  const BatteryVolVal = BatteryVol.addText(12.5 + " V");
+  const BatteryVolVal = BatteryVol.addText(landroidData.dat.bt.v + " V");
   BatteryVolVal.font = Font.boldSystemFont(15);
   column1.addSpacer(10);
 
@@ -73,9 +129,9 @@ async function createWidget() {
   RangeStack.layoutVertically();
   const RangeStatusLabel = RangeStack.addText("Ladestand");
   RangeStatusLabel.font = Font.mediumSystemFont(11);
-  const RangeStatusVal = RangeStack.addText(25 + " %");
+  const RangeStatusVal = RangeStack.addText(landroidData.dat.bt.p + " %");
   RangeStatusVal.font = Font.boldSystemFont(15);
-  RangeStatusVal.textColor = getTextColor(25);
+  RangeStatusVal.textColor = getTextColor(landroidData.dat.bt.p);
   column2.addSpacer(10);
 
   let LastUpdateStack = column2.addStack();
@@ -83,16 +139,35 @@ async function createWidget() {
   LastUpdateStack.layoutVertically();
   const LastUpdateLabel = LastUpdateStack.addText("Letzter Status");
   LastUpdateLabel.font = Font.mediumSystemFont(12);
-  const LastUpdateVal = LastUpdateStack.addText("14:07");
+  const LastUpdateVal = LastUpdateStack.addText(
+    new Date().toLocaleString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+  );
   LastUpdateVal.font = Font.boldSystemFont(15);
   column2.addSpacer(10);
 
   return listWidget;
 }
 
+function getStatusText() {
+  let statusText = "";
+  if (landroidData.dat.le == 0) {
+    if (landroidData.dat.bt.c != 0) {
+      statusText = LadeStatus[landroidData.dat.bt.c];
+    } else {
+      statusText = Status[landroidData.dat.ls];
+    }
+  } else {
+    statusText = ErrorStatus[landroidData.dat.le];
+  }
+  return statusText;
+}
+
 async function getLandroidData() {
   let productId = ""; //PRODUCT ID HERE
-
   let BearerTokenRequest = new Request(
     "https://api.worxlandroid.com/api/v2/oauth/token"
   );
@@ -102,18 +177,13 @@ async function getLandroidData() {
     "Content-Type": "multipart/form-data;",
     "Accept-Encoding": "gzip, deflate, br",
   };
+
+  BearerTokenRequest.addParameterToMultipart("username", "");
+  BearerTokenRequest.addParameterToMultipart("password", "");
   BearerTokenRequest.addParameterToMultipart("grant_type", "password");
-  BearerTokenRequest.addParameterToMultipart(
-    "username",
-    "" //Email here
-  );
-  BearerTokenRequest.addParameterToMultipart("password", ""); //Password here
   BearerTokenRequest.addParameterToMultipart("client_id", "1");
   BearerTokenRequest.addParameterToMultipart("scope", "*");
-  BearerTokenRequest.addParameterToMultipart(
-    "client_secret",
-    "" //Client secret here
-  );
+  BearerTokenRequest.addParameterToMultipart("client_secret", "");
 
   let tokenResponse = await BearerTokenRequest.loadJSON();
   let StatusInformationRequest = new Request(
@@ -123,21 +193,28 @@ async function getLandroidData() {
   StatusInformationRequest.headers = {
     Authorization: "Bearer " + tokenResponse.access_token,
   };
+
   return await StatusInformationRequest.loadJSON();
 }
 
 async function getStatusImage() {
   let image = "status_4.png";
-  if (landroidData.dat.ls == 1) {
-    image = "status_1.png";
-  } else if (landroidData.dat.ls == 2) {
-    image = "status_2.png";
+  if (landroidData.dat.le == 0) {
+    if (landroidData.dat.bt.c != 0) {
+      if (landroidData.dat.bt.c == 1) {
+        image = "status_2.png";
+      } else {
+        image = "status_4.png";
+      }
+    } else {
+      image = "status_" + landroidData.dat.ls + ".png";
+    }
+  } else {
+    image = "status_4.png";
   }
-
-  let fm = FileManager.local();
-  let dir = fm.documentsDirectory();
   let path = fm.joinPath(dir, image);
   if (fm.fileExists(path)) {
+    console.log(path);
     return getImageFor(image);
   }
 }
@@ -155,18 +232,6 @@ function getTextColor(data) {
 }
 
 async function saveImages() {
-  let imgs = {
-    status_1:
-      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-    status_2:
-      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-    status_3:
-      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-    status_4:
-      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-    status_5:
-      "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXHVWZPZVDTKWVZW4YEYWZB4XA",
-  };
   for (img in imgs) {
     imgName = img + ".png";
     imgPath = fm.joinPath(dir, imgName);
@@ -179,7 +244,8 @@ async function saveImages() {
 }
 
 async function getImageFor(name) {
-  imgPath = fm.joinPath(dir, name + ".png");
+  imgPath = fm.joinPath(dir, name);
+  console.log(imgPath);
   await fm.downloadFileFromiCloud(imgPath);
   img = await fm.readImage(imgPath);
   return img;
