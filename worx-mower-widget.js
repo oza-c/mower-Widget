@@ -7,6 +7,10 @@
 // email: matthes@schlichte.dev
 let PARAM = args.widgetParameter;
 let landroidData;
+let fm = FileManager.iCloud();
+let dir = fm.joinPath(fm.documentsDirectory(), "worx-landroid-widget");
+
+await saveImages();
 
 async function getLandroidData() {
   let productId = ""; //PRODUCT ID HERE
@@ -56,9 +60,7 @@ async function createWidget() {
   const column0 = wrap.addStack();
   column0.layoutVertically();
 
-  const icon = await getStatusImage(
-    "mower_status_" + landroidData.dat.ls + ".png"
-  );
+  const icon = await getStatusImage("status_" + landroidData.dat.ls + ".png");
 
   let CarStack = column0.addStack();
   let iconImg = CarStack.addImage(icon);
@@ -135,6 +137,37 @@ function getTextColor(data) {
   } else {
     return Color.red();
   }
+}
+
+async function saveImages() {
+  let imgs = {
+    status_1:
+      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_1.png?raw=true",
+    status_2:
+      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_2.png?raw=true",
+    status_3:
+      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_3.png?raw=true",
+    status_4:
+      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_4.png?raw=true",
+    status_5:
+      "https://github.com/oza-c/Worx-Widget/blob/main/images/Status_5.png?raw=true",
+  };
+  for (img in imgs) {
+    imgName = img + ".png";
+    imgPath = fm.joinPath(dir, imgName);
+    if (!fm.fileExists(imgPath)) {
+      req = new Request(imgs[img]);
+      img = await req.loadImage();
+      fm.writeImage(imgPath, img);
+    }
+  }
+}
+
+async function getImageFor(name) {
+  imgPath = fm.joinPath(dir, name + ".png");
+  await fm.downloadFileFromiCloud(imgPath);
+  img = await fm.readImage(imgPath);
+  return img;
 }
 
 // helper function to download an image from a given url
