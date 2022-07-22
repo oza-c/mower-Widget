@@ -9,6 +9,8 @@ Widget zeigt dir den aktuellen Ladestand, Status sowie die aktuelle Spannung an.
 </br>
 <br>
   <img src='https://img.shields.io/github/license/oza-c/Worx-Widget'>
+ <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oza-c/Worx-widget">
+ <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/oza-c/Worx-Widget">
   <br>
 </div>
 

@@ -10,8 +10,12 @@
 let UpdateTimeInterval = 180; //In Sekunden
 
 //DONT CHANGE ANYTHING ! OWN RISK //
+let scriptURL =
+  "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/worx-mower-widget.js";
 let PARAM = args.widgetParameter;
 let fm = FileManager.iCloud();
+let uCheck = await updateCheck(1.0);
+log(`${uCheck} to update available`);
 ////////////////////////////////////
 
 //// Images //////////////////////////////////
@@ -265,4 +269,43 @@ async function getImageFor(name) {
 async function loadImage(imgUrl) {
   const req = new Request(imgUrl);
   return await req.loadImage();
+}
+
+async function updateCheck(version) {
+  let uC;
+  try {
+    let updateCheck = new Request(`${scriptURL}on`);
+    uC = await updateCheck.loadJSON();
+  } catch (e) {
+    return log(e);
+  }
+  log(uC);
+  log(uC.version);
+  let needUpdate = false;
+  if (uC.version != version) {
+    needUpdate = true;
+    log("Server version available");
+    if (!config.runsInWidget) {
+      log("running standalone");
+
+      let upd = new Alert();
+      upd.title = "Server Version Available";
+      upd.addAction("OK");
+      upd.addDestructiveAction("Later");
+      upd.message =
+        "Changes:\n" + uC.notes + "\n\nPress OK to get the update from GitHub";
+      if ((await upd.present()) == 0) {
+        let r = new Request(scriptURL);
+        //download the updated script file
+        let updatedCode = await r.loadString();
+        let path = fm.joinPath(fm.documentsDirectory(), `${Script.name()}.js`);
+        log(path);
+        fm.writeString(path, updatedCode);
+        throw new Error("Update Complete!");
+      }
+    }
+  } else {
+    log("up to date");
+  }
+  return needUpdate;
 }
