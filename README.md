@@ -27,7 +27,8 @@ Widget zeigt dir den aktuellen Ladestand, Status sowie die aktuelle Spannung an.
 
 # 👨‍💻 Geplante Änderungen
 
-- [ ] Updatemechanismus
+- [x] Updatemechanismus
+- [ ] API Recyling (Bearer Token)
 - [ ] Möglichkeit zum Auswählen der angezeigten Informationen
 - [ ] Widgetgröße S und M
 - [ ] Visuelle Anpassungen (Grafiken)

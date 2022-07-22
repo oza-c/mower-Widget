@@ -6,6 +6,23 @@
 // original author: Matthes Schlichte
 // email: matthes@schlichte.dev
 
+// Credentials (Kann hier per Hand gesetzt werden oder über die Scriptable Widget Parameter (siehe GitHub Repo))//
+let c_email = "";
+let c_password = "";
+let c_deviceId = "";
+let c_client_secret = "";
+
+let argInput = args.widgetParameter;
+
+if (argInput !== null) {
+  [c_email, c_password, c_deviceId, c_client_secret] = argInput.split("|");
+} else if (c_email !== null || c_password !== null || c_deviceId !== null) {
+  throw new Error(
+    "Es müssen Parameter angegeben werden, falls du hier Probleme hast schaue gerne nochmal in die GitHub Repo"
+  );
+}
+////////////////
+
 // CONFIG ZONE //
 let UpdateTimeInterval = 180; //In Sekunden
 
@@ -173,8 +190,6 @@ function getStatusText() {
 }
 
 async function getLandroidData() {
-  let productId = ""; //PRODUCT ID HERE
-
   let BearerTokenRequest = new Request(
     "https://api.worxlandroid.com/api/v2/oauth/token"
   );
@@ -185,15 +200,17 @@ async function getLandroidData() {
     "Accept-Encoding": "gzip, deflate, br",
   };
   BearerTokenRequest.addParameterToMultipart("grant_type", "password");
-  BearerTokenRequest.addParameterToMultipart("username", "");
-  BearerTokenRequest.addParameterToMultipart("password", "");
+  BearerTokenRequest.addParameterToMultipart("username", c_email);
+  BearerTokenRequest.addParameterToMultipart("password", c_password);
   BearerTokenRequest.addParameterToMultipart("client_id", "1");
   BearerTokenRequest.addParameterToMultipart("scope", "*");
-  BearerTokenRequest.addParameterToMultipart("client_secret", "");
+  BearerTokenRequest.addParameterToMultipart("client_secret", c_secret);
 
   let tokenResponse = await BearerTokenRequest.loadJSON();
   let StatusInformationRequest = new Request(
-    "https://api.worxlandroid.com/api/v2/product-items/" + productId + "/status"
+    "https://api.worxlandroid.com/api/v2/product-items/" +
+      c_productId +
+      "/status"
   );
   StatusInformationRequest.method = "GET";
   StatusInformationRequest.headers = {
