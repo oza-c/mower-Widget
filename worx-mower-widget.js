@@ -160,7 +160,7 @@ function getStatusText() {
     if (landroidData.dat.bt.c != 0) {
       statusText = LadeStatus[landroidData.dat.bt.c];
     } else {
-      statusText = Status[landroidData.dat.ls];
+      statusText = LastStatus[landroidData.dat.ls];
     }
   } else {
     statusText = ErrorStatus[landroidData.dat.le];
