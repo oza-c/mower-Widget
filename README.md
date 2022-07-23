@@ -14,6 +14,21 @@ Widget zeigt dir den aktuellen Ladestand, Status sowie die aktuelle Spannung an.
   <br>
 </div>
 
+
+
+# ❗️ Disclaimer / Important Information
+### Deutsch / German
+- Das automatische Aktualisieren der Statusdaten über Scriptables ( `refreshAfterDate = new Date(
+    Date.now() + 1000 * UpdateTimeInterval
+  );` ) ist zu diesem Zeitpunkt nicht erlaubt (Um unnötigen Traffic in der Infrastruktur von Positec zu vermeiden), deswegen ist ein manuelles Anfragen der Daten erforderlich.
+
+### English
+- Automatic updating of the status data via Scriptables ( `refreshAfterDate = new Date(
+    Date.now() + 1000 * UpdateTimeInterval
+  );` ) is not allowed at this time (to avoid unnecessary traffic in the infrastructure of Positec), therefore a manual request of the data is necessary.
+
+
+
 # 🌟Installation
 
 - Im Browser: https://raw.githubusercontent.com/oza-c/Worx-Widget/main/worx-mower-widget.js öffnen
