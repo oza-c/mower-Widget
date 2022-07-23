@@ -24,7 +24,7 @@ if (argInput !== null) {
 ////////////////
 
 // CONFIG ZONE //
-let UpdateTimeInterval = 180; //In Sekunden
+let UpdateTimeInterval = 180;
 
 //DONT CHANGE ANYTHING ! OWN RISK //
 let scriptURL =
@@ -105,9 +105,6 @@ Script.complete();
 async function createWidget() {
   let listWidget = new ListWidget();
   listWidget.backgroundColor = new Color("1B2430");
-  listWidget.refreshAfterDate = new Date(
-    Date.now() + 1000 * UpdateTimeInterval
-  );
   listWidget.setPadding(10, 5, 10, 5);
   listWidget.addSpacer(10);
 
