@@ -14,7 +14,7 @@ let c_client = "";
 
 let argInput = args.widgetParameter;
 
-if (argInput !== null) {
+if (argInput !== null && c_email === "") {
   [c_email, c_password, c_deviceId, c_client] = argInput.split("|");
 } else if (c_email !== null || c_password !== null || c_deviceId !== null || c_secret !== null) {
   throw new Error(
