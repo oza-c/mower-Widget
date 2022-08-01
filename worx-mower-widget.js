@@ -212,7 +212,7 @@ async function getLandroidData() {
   let tokenResponse = await BearerTokenRequest.loadJSON();
   let StatusInformationRequest = new Request(
     "https://api.worxlandroid.com/api/v2/product-items/" +
-      c_productId +
+      c_deviceId +
       "/status"
   );
   StatusInformationRequest.method = "GET";
