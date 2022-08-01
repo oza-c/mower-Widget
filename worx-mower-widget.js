@@ -11,12 +11,18 @@ let c_email = "";
 let c_password = "";
 let c_deviceId = "";
 let c_client = "";
+let c_secret = "";
 
 let argInput = args.widgetParameter;
 
 if (argInput !== null && c_email === "") {
   [c_email, c_password, c_deviceId, c_client] = argInput.split("|");
-} else if (c_email !== null || c_password !== null || c_deviceId !== null || c_secret !== null) {
+} else if (
+  c_email !== null ||
+  c_password !== null ||
+  c_deviceId !== null ||
+  c_secret !== null
+) {
   throw new Error(
     "Es müssen Parameter angegeben werden, falls du hier Probleme hast schaue gerne nochmal in die GitHub Repo"
   );
