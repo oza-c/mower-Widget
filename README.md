@@ -56,6 +56,6 @@ Hast du Vorschläge oder Verbesserungen? Eröffne gerne ein Issue oder PullReque
 
 # ⚠️ License
 
-The Mower Widger is licensed under the MIT license, which you can find in the License file.
+The Mower Widget is licensed under the MIT license, which you can find in the License file.
 
 <br />
