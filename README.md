@@ -5,36 +5,28 @@
 </div>
 <br />
 <div align='center'>
-Widget zeigt dir den aktuellen Ladestand, Status sowie die aktuelle Spannung an.
+Widget zeigt dir den aktuellen Ladestand, Status sowie die aktuelle Spannung deines Worx Landroid Roboters an.
 </br>
 <br>
-  <img src='https://img.shields.io/github/license/oza-c/Worx-Widget'>
- <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oza-c/Worx-widget">
- <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/oza-c/Worx-Widget">
+  <img src='https://img.shields.io/github/license/oza-c/mower-Widget'>
+ <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oza-c/mower-widget">
+ <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/oza-c/mower-Widget">
   <br>
 </div>
 
-
-
 # ❗️ Disclaimer / Important Information
-### Deutsch / German
-- Das automatische Aktualisieren der Statusdaten über Scriptables ( `refreshAfterDate = new Date(
-    Date.now() + 1000 * UpdateTimeInterval
-  );` ) ist zu diesem Zeitpunkt nicht erlaubt (Um unnötigen Traffic in der Infrastruktur von Positec zu vermeiden), deswegen ist ein manuelles Anfragen der Daten erforderlich.
 
-### English
-- Automatic updating of the status data via Scriptables ( `refreshAfterDate = new Date(
-    Date.now() + 1000 * UpdateTimeInterval
-  );` ) is not allowed at this time (to avoid unnecessary traffic in the infrastructure of Positec), therefore a manual request of the data is necessary.
-
-
+Dieses Projekt steht in keiner Verbindung zu den Marken Worx, Landroid und Positec.
+Die Nennung von Markennamen und geschützter Warenzeichen hat lediglich beschreibenden Charakter.
 
 # 🌟Installation
 
-- Im Browser: https://raw.githubusercontent.com/oza-c/Worx-Widget/main/worx-mower-widget.js öffnen
+- Im Browser: https://raw.githubusercontent.com/oza-c/mower-Widget/main/mower-widget.js öffnen
 - Gesamten Skripttext kopieren
 - Scriptable (wenn benötigt im AppStore herunterladen: https://apps.apple.com/app/scriptable/id1405459188) öffnen und ein neues Skript mit dem vorher kopierten Skripttext erstellen
-- ... Konfiguration vornehmen
+- Widget im Homebildschirm anlegen & Scriptable Widget auswählen
+- Script auswählen & Konfigurationstext anlegen
+  `EMAIL|PASSWORD|DEVICEID|CLIENTSECRET`
 
 # Update
 
@@ -44,10 +36,10 @@ Widget zeigt dir den aktuellen Ladestand, Status sowie die aktuelle Spannung an.
 
 - [x] Updatemechanismus
 - [ ] API Recyling (Bearer Token)
+- [ ] Konfiguration vereinfachen
 - [ ] Möglichkeit zum Auswählen der angezeigten Informationen
 - [ ] Widgetgröße S und M
 - [ ] Visuelle Anpassungen (Grafiken)
-- [ ] Konfiguration vereinfachen
 - [ ] und vieles mehr...
 
 # ✍️ Contributing
@@ -58,4 +50,5 @@ Hast du Vorschläge oder Verbesserungen? Eröffne gerne ein Issue oder PullReque
 
 The Mower Widget is licensed under the MIT license, which you can find in the License file.
 
+Update Mechanism comes from [mvan231](https://github.com/mvan231/Scriptable#updater-mechanism-code-example)
 <br />
