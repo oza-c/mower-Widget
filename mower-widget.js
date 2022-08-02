@@ -34,7 +34,7 @@ let UpdateTimeInterval = 180;
 
 //DONT CHANGE ANYTHING ! OWN RISK //
 let scriptURL =
-  "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/worx-mower-widget.js";
+  "https://raw.githubusercontent.com/oza-c/mower-Widget/main/mower-widget.js";
 let PARAM = args.widgetParameter;
 let fm = FileManager.iCloud();
 let uCheck = await updateCheck(1.0);
