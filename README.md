@@ -8,9 +8,9 @@
 Widget zeigt dir den aktuellen Ladestand, Status sowie die aktuelle Spannung deines Worx Landroid Roboters an.
 </br>
 <br>
-  <img src='https://img.shields.io/github/license/oza-c/mower-Widget'>
+<a href="https://github.com/oza-c/mower-Widget/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/oza-c/mower-Widget"></a>
  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/oza-c/mower-widget">
- <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/oza-c/mower-Widget">
+<a href="https://github.com/oza-c/mower-Widget/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/oza-c/mower-Widget"></a>
   <br>
 </div>
 

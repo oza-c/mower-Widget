@@ -44,17 +44,17 @@ log(`${uCheck} to update available`);
 //// Images //////////////////////////////////
 let imgs = {
   status_1:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_1.png?token=GHSAT0AAAAAABWYJFXGSJ35FBT2YIBZZCPWYWZRBZA",
+    "https://raw.githubusercontent.com/oza-c/mower-Widget/main/images/Status_1.png",
   status_4:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_4.png?token=GHSAT0AAAAAABWYJFXHTAATUF2WCBEDEGCMYWZRCHQ",
+    "https://raw.githubusercontent.com/oza-c/mower-Widget/main/images/Status_4.png",
   status_7:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_7.png?token=GHSAT0AAAAAABWYJFXGMA2M7MBCFKHNMHNOYWZRC2A",
+    "https://raw.githubusercontent.com/oza-c/mower-Widget/main/images/Status_7.png",
   status_error:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_error.png?token=GHSAT0AAAAAABWYJFXHI7ODLKSS6PQHM672YWZRDIQ",
+    "https://raw.githubusercontent.com/oza-c/mower-Widget/main/images/Status_error.png",
   status_loading:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/Status_loading.png?token=GHSAT0AAAAAABWYJFXGEXN3P6PVVAZMMOKKYWZRDVQ",
+    "https://raw.githubusercontent.com/oza-c/mower-Widget/main/images/Status_loading.png",
   status_rain:
-    "https://raw.githubusercontent.com/oza-c/Worx-Widget/main/images/status_rain.png?token=GHSAT0AAAAAABWYJFXHESZEW2YJON5P5NXMYWZRBDA",
+    "https://raw.githubusercontent.com/oza-c/mower-Widget/main/images/status_rain.png",
 };
 
 /// Status Enums ///
